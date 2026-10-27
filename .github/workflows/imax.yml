@@ -1,0 +1,55 @@
+name: IMAX watcher
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # GitHub's shortest interval
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: "Print what the script can see"
+        type: boolean
+        default: false
+
+# One run at a time, so state never clashes.
+concurrency:
+  group: imax-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - name: Debug run
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug }}
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python imax_watch.py --debug
+
+      # Checks every 30 seconds for 4.5 minutes, so the 5 minute gap
+      # between scheduled runs is mostly covered.
+      - name: Watch
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.debug) }}
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python imax_watch.py --duration 270 --every 30
+
+      - name: Save state
+        run: |
+          git config user.name "imax-watcher"
+          git config user.email "imax-watcher@users.noreply.github.com"
+          git add imax_state.json
+          git diff --staged --quiet || (git commit -m "Update state" && git push)

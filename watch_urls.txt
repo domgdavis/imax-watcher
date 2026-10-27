@@ -1,0 +1,12 @@
+# One URL per line. Lines starting with # are ignored.
+#
+# Film pages: tracks dates, Buy buttons and "On sale" times. Example:
+# https://whatson.bfi.org.uk/imax/Online/default.asp?BOparam::WScontent::loadArticle::permalink=arrietty-imax-dubbed
+#
+# Listing pages: start the line with "listing:" and any new film on the page is an alert.
+# The IMAX home page and the Special screenings page are already built in.
+# Example:
+# listing: https://whatson.bfi.org.uk/imax/Online/default.asp?BOparam::WScontent::loadArticle::permalink=films-for-christmas
+
+# Dune: Part Three
+https://whatson.bfi.org.uk/imax/Online/default.asp?BOparam::WScontent::loadArticle::permalink=dune-part-three-imax&BOparam::WScontent::loadArticle::context_id=
