@@ -39,7 +39,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 
-VERSION = "3.2"  # bump on every change; shown in Telegram messages
+VERSION = "3.3"  # bump on every change; shown in Telegram messages
 
 BASE = "https://whatson.bfi.org.uk"
 LONDON = ZoneInfo("Europe/London")

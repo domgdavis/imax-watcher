@@ -1,8 +1,9 @@
 name: IMAX watcher
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"   # GitHub's shortest interval
+  # Schedule switched off in v3.3: BFI blocks GitHub's servers (403, Cloudflare check).
+  # schedule:
+  #   - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       debug:
